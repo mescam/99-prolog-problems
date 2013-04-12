@@ -42,3 +42,14 @@ compress([H|T],R) :- compress(T,R1),
                      R=R1.
 compress([H|T],R) :- compress(T, R1),
                      append([H], R1, R).
+
+%pack
+
+pack([],[]).
+pack([H|T],R) :- pack(T,[H1|T1]),
+                 member(H, H1),
+                 append([H],H1,H2),
+                 R=[H2|T1].
+pack([H|T],R) :- pack(T, R1),
+                 append([[H]],R1,R).
+                 
