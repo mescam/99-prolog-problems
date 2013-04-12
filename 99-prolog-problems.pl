@@ -1,4 +1,4 @@
-%last_element
+%last_elementt remo
 last_element(X,[X|[]]).
 last_element(X,[_|T]) :- last_element(X,T).
 
@@ -34,3 +34,11 @@ flatten_list([H|T],R) :- is_list(H),
                          append(RH, RT, R).
 flatten_list([H|T],R) :- flatten_list(T,R1), 
                          append([H],R1,R).
+
+%compress
+compress([],[]).
+compress([H|T],R) :- compress(T,R1),
+                     member(H,R1),
+                     R=R1.
+compress([H|T],R) :- compress(T, R1),
+                     append([H], R1, R).
