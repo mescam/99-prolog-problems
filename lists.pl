@@ -52,4 +52,12 @@ pack([H|T],R) :- pack(T,[H1|T1]),
                  R=[H2|T1].
 pack([H|T],R) :- pack(T, R1),
                  append([[H]],R1,R).
-                 
+
+%encode
+encode([],[]).
+encode([H|T],R) :- encode(T,[[N,E]|T1]),
+                   H=E,
+                   N1 is N+1,
+                   R=[[N1,E]|T1].
+encode([H|T],R) :- encode(T,L),
+                   append([[1,H]],L,R).
