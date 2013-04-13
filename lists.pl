@@ -61,3 +61,21 @@ encode([H|T],R) :- encode(T,[[N,E]|T1]),
                    R=[[N1,E]|T1].
 encode([H|T],R) :- encode(T,L),
                    append([[1,H]],L,R).
+
+%modified encode
+encode_mod([],[]).
+encode_mod([H|T],R) :- encode(T,[[N,E]|T1]),
+                       H=E,
+                       N1 is N+1,
+                       R=[[N1,E]|T1].
+encode_mod([H|T],R) :- encode(T,[[N,E]|T1]),
+                       H\=E,
+                       append([H],[[N,E]|T1],R).
+encode_mod([H|T],R) :- encode(T,[H1|T1]),
+                       not(is_list(H1)),
+                       H1=H,
+                       append([[2,H]],T1,R).
+encode_mod([H|T],R) :- encode(T,[H1|T1]),
+                       not(is_list(H1)),
+                       H1\=H,
+                       append([H],[H1|T1],R).
