@@ -152,3 +152,14 @@ drop_n([H|T],I,C,R) :-
 
 drop(L,C,R) :-
 	drop_n(L,1,C,R).
+
+%1.17 split
+split(L,0,[],L).
+split([H|T],N,L1,L2) :-
+	N > 0,
+	N1 is N-1,
+	split(T,N1,L1n,L2),
+	L1=[H|L1n].
+
+%1.18 split 2
+
