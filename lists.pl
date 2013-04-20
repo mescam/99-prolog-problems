@@ -114,3 +114,41 @@ decode([E|T], R) :-
 	decode(T, R1),
 	append([E],R1,R).
 
+%1.13 direct encode
+%later...
+
+
+%1.14 duplicate
+dupli([],[]).
+dupli([H|T],X) :-
+	dupli(T,X1),
+	X = [H,H|X1].
+
+%1.15 duplicate N times
+multiply(_,0,[]).
+multiply(E,C,R) :-
+	C1 is C-1,
+	multiply(E,C1,R1),
+	append([E],R1,R).
+
+dupli([],_,[]).
+dupli([H|T],C,X) :-
+	dupli(T,C,X1),
+	multiply(H,C,R1),
+	append(R1,X1,X).
+
+%1.16 drop nth
+drop_n([],_,_,[]).
+drop_n([_|T],I,C,R) :-
+	I1 is I+1,
+	drop_n(T,I1,C,R1),
+	0 =:= I mod C,
+	R = R1.
+drop_n([H|T],I,C,R) :-
+	I1 is I+1,
+	drop_n(T,I1,C,R1),
+	0 =\= (I mod C),
+	R = [H|R1].
+
+drop(L,C,R) :-
+	drop_n(L,1,C,R).
