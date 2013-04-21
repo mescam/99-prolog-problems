@@ -23,10 +23,9 @@ num_list([_|T],N) :-
 
 %1.05 rev_list
 rev_list([],[]).
-rev_list(L,Rev) :-
-	append(L1, [T], L),
-        rev_list(L1, Rev1),
-        append([T],Rev1,Rev).
+rev_list(L,Rev) :- append(L1, [T], L),
+	rev_list(L1, Rev1),
+	append([T],Rev1,Rev).
 
 %1.06 palindrome
 palindrome(L) :-
@@ -161,5 +160,20 @@ split([H|T],N,L1,L2) :-
 	split(T,N1,L1n,L2),
 	L1=[H|L1n].
 
-%1.18 split 2
-
+%1.18 slice
+slice(_,N1,N2,_,_) :- N1 > N2, !, fail.
+slice(L,_,0,[],L).
+slice([H|T],N1,N2,L1,L2) :-
+	N1 > 1,
+	N1x is N1-1,
+	N2x is N2-1,
+	slice(T,N1x,N2x,L1x,L2x),
+	L1=L1x,
+	L2=[H|L2x].
+slice([H|T],N1,N2,L1,L2) :-
+	N1 =< 1,
+	N1x is N1-1,
+	N2x is N2-1,
+	slice(T,N1x,N2x,L1x,L2x),
+	L1=[H|L1x],
+	L2=L2x.
