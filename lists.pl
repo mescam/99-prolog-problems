@@ -215,3 +215,25 @@ range(X,Y,L) :-
 	range(X1,Y,L1),
 	L=[X|L1].
 
+% 1.23 (**) Extract a given number of randomly selected elements from a
+% list.
+rnd_select(_,0,[]).
+rnd_select(L,N,R) :-
+	length(L,Len),
+	Len>=N,
+	N>0,
+	N1 is N-1,
+	Y is random(Len)+1,
+	remove_at(X,L,Y,L1),
+	rnd_select(L1,N1,R1),
+	R=[X|R1].
+
+%1.24 (*) Lotto: Draw N different random numbers from the set 1..M.
+lotto(N,M,L) :-
+	range(1,M,L1),
+	rnd_select(L1,N,L).
+
+%1.25 (*) Generate a random permutation of the elements of a list.
+rnd_permu(L,R) :-
+	length(L,Len),
+	rnd_select(L,Len,R).
