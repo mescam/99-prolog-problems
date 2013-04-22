@@ -175,5 +175,43 @@ slice([H|T],N1,N2,L1,L2) :-
 	N1x is N1-1,
 	N2x is N2-1,
 	slice(T,N1x,N2x,L1x,L2x),
-	L1=[H|L1x],
+        L1=[H|L1x],
 	L2=L2x.
+
+%1.19 (**) Rotate a list N places to the left.
+rotate(L,N,R) :-
+	N > 0,
+	split(L, N, L1, L2),
+	append(L2,L1,R).
+rotate(L,N,R) :-
+	N =< 0,
+	length(L, Len),
+	N1 is Len+N,
+	split(L, N1, L1, L2),
+	append(L2, L1, R).
+
+%1.20 (*) Remove the K'th element from a list.
+remove_at(H,[H|T],1,T).
+remove_at(X,[H|T],K,R) :-
+	K>1,
+	K1 is K-1,
+	remove_at(X,T,K1,R1),
+	R=[H|R1].
+
+%1.21 (*) Insert an element at a given position into a list.
+insert_at(E,L,1,[E|L]).
+insert_at(E,[H|T],K,R) :-
+	K>1,
+	K1 is K-1,
+	insert_at(E,T,K1,R1),
+	R=[H|R1].
+
+%1.22 (*) Create a list containing all integers within a given range.
+range(X,X,[X]). % lol.
+range(X,Y,_) :- X>Y, !, fail.
+range(X,Y,L) :-
+	X\=Y,
+	X1 is X+1,
+	range(X1,Y,L1),
+	L=[X|L1].
+
