@@ -114,7 +114,13 @@ decode([E|T], R) :-
 	append([E],R1,R).
 
 %1.13 direct encode
-%later...
+count([],_,0).
+count([E|T],E,N) :-
+	count(T,E,N1),
+	N is N1+1.
+count([H|_],E,N) :-
+	H\=E,
+	N=0.
 
 
 %1.14 duplicate
@@ -237,3 +243,76 @@ lotto(N,M,L) :-
 rnd_permu(L,R) :-
 	length(L,Len),
 	rnd_select(L,Len,R).
+
+%1.26 (**) Generate the combinations of K distinct objects chosen from
+%the N elements of a list
+
+element(X,[X|T],T).
+element(X, [_|T],R) :- element(X,T,R).
+
+combination(0,_,[]).
+combination(K,We,Wy) :-
+	K>0,
+	K1 is K-1,
+	element(X, We, R),
+	combination(K1, R, Wy1),
+	Wy=[X|Wy1].
+
+%1.27 (**) Group the elements of a set into disjoint subsets.
+%a) In how many ways can a group of 9 people work in 3 disjoint subgroups of 2, 3 and 4 persons? Write a predicate that generates all the possibilities via backtracking.
+group3(L,G1,G2,G3) :-
+	%group 1
+	select_gmembers(L, 2, G1),
+	subtract(L, G1, L1),
+	select_gmembers(L1, 3, G2),
+	subtract(L1, G2, L2),
+	select_gmembers(L2, 4, G3).
+
+select_gmembers(_, 0, []).
+select_gmembers(L, N, [X|Wy1]) :-
+	N > 0,
+	element(X, L, L1),
+	N1 is N-1,
+	select_gmembers(L1, N1, Wy1).
+
+%b) Generalize the above predicate in a way that we can specify a list of group sizes and the predicate will return a list of groups.
+
+group(_,[],[]).
+group(L, [N|Ns], Wy) :-
+	select_gmembers(L, N, Wy1),
+	subtract(L, Wy1, L1),
+	group(L1, Ns, Wy2),
+	Wy = [Wy1|Wy2].
+
+%1.28 (**) Sorting a list of lists according to length of sublists
+% a) We suppose that a list (InList) contains elements that are lists
+% themselves. The objective is to sort the elements of InList according
+% to their length. E.g. short lists first, longer lists later, or vice
+% versa.
+
+into_sorted_list(X,[],[X]).
+into_sorted_list(X,[H|T],[H|R2]) :-
+	length(X,Len1),
+	length(H,Len2),
+	Len1 > Len2, !,
+	into_sorted_list(X,T,R2).
+into_sorted_list(X, [H|T], [X,H|T]).
+
+
+lsort([X],[X]) :- !.
+lsort([H|T], R) :-
+	lsort(T, R1),
+	into_sorted_list(H, R1, R).
+
+%b) Again, we suppose that a list (InList) contains elements that are lists themselves. But this time the objective is to sort the elements of InList according to their length frequency; i.e. in the default, where sorting is done ascendingly, lists with rare lengths are placed first, others with a more frequent length come later.
+
+add_len([],[],0).
+add_len([H|T],[H1|T1]) :-
+	add_len(T,T1),
+	length(H,Len),
+	H1 = H/Len.
+
+
+
+
+

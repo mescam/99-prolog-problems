@@ -42,20 +42,22 @@ polowki(We,Le,Pr) :-
 	Le=[H|Le1],
 	append(Pr1,[X],Pr).
 
-mergex([],L,L):- !.
-mergex(L,[],L).
-mergex([X|T1],[Y|T2],[X|T3]):-
-	X<Y,!,
-	mergex(T1,[Y|T2],T3).
-mergex(L1,[Y|T2],[Y|T3]):-
-	mergex(L1,T2,T3).
+merge2([],X,X) :- !.
+merge2(X,[],X) :- !.
+merge2([H1|T1],[H2|T2],Wy) :-
+	H1>H2, !,
+	merge2([H1|T1],T2,Wy1),
+	Wy = [H2|Wy1].
+merge2([H1|T1],[H2|T2],Wy) :-
+	merge2(T1,[H2|T2],Wy1),
+	Wy = [H1|Wy1].
 
 mergesort([X],[X]) :- !.
 mergesort(We,Wy) :-
 	polowki(We,L,P),
 	mergesort(L,L1),
 	mergesort(P,P1),
-	mergex(L1,P1,Wy).
+	merge2(L1,P1,Wy).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -78,7 +80,7 @@ quicksort([HWe|TWe],Wy) :-
 	quicksort(M,M1),
 	quicksort(W,W1),
 	append(M1,[HWe|W1],Wy).
-
+%test
 
 
 
